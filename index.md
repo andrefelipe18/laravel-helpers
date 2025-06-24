@@ -2,100 +2,100 @@
 
 ## Índice de Helpers
 
-| Helper                                            | Descrição                                                |
-| ------------------------------------------------- | -------------------------------------------------------- |
-| [`__()`](#__)                                     | Traduz mensagem (alias para trans)                       |
-| [`abort()`](#abort)                               | Lança HttpException com dados fornecidos                 |
-| [`abort_if()`](#abort-if)                         | Lança HttpException se condição for verdadeira           |
-| [`abort_unless()`](#abort-unless)                 | Lança HttpException a menos que condição seja verdadeira |
-| [`action()`](#action)                             | Gera URL para ação do controller                         |
-| [`app()`](#app)                                   | Obtém instância do container                             |
-| [`app_path()`](#app-path)                         | Obtém caminho da pasta da aplicação                      |
-| [`append_config()`](#append-config)               | Anexa itens de configuração                              |
-| [`asset()`](#asset)                               | Gera caminho de asset                                    |
-| [`auth()`](#auth)                                 | Obtém instância de autenticação                          |
-| [`back()`](#back)                                 | Redirecionamento para página anterior                    |
-| [`base_path()`](#base-path)                       | Obtém caminho base da instalação                         |
-| [`bcrypt()`](#bcrypt)                             | Faz hash usando algoritmo bcrypt                         |
-| [`blank()`](#blank)                               | Verifica se valor está vazio                             |
-| [`broadcast()`](#broadcast)                       | Inicia transmissão de evento                             |
-| [`cache()`](#cache)                               | Gerencia valores do cache                                |
-| [`class_basename()`](#class-basename)             | Obtém nome base da classe                                |
-| [`class_uses_recursive()`](#class-uses-recursive) | Retorna traits usados recursivamente                     |
-| [`collect()`](#collect)                           | Cria collection a partir de valor                        |
-| [`config()`](#config)                             | Gerencia valores de configuração                         |
-| [`config_path()`](#config-path)                   | Obtém caminho de configuração                            |
-| [`context()`](#context)                           | Gerencia contexto para logs                              |
-| [`cookie()`](#cookie)                             | Cria instância de cookie                                 |
-| [`csrf_field()`](#csrf-field)                     | Gera campo de formulário CSRF                            |
-| [`csrf_token()`](#csrf-token)                     | Obtém token CSRF                                         |
-| [`data_fill()`](#data-fill)                       | Preenche dados faltantes                                 |
-| [`data_forget()`](#data-forget)                   | Remove item por notação de ponto                         |
-| [`data_get()`](#data-get)                         | Obtém item por notação de ponto                          |
-| [`data_set()`](#data-set)                         | Define item por notação de ponto                         |
-| [`database_path()`](#database-path)               | Obtém caminho do banco de dados                          |
-| [`decrypt()`](#decrypt)                           | Descriptografa valor                                     |
-| [`defer()`](#defer)                               | Adia execução de callback                                |
-| [`dispatch()`](#dispatch)                         | Despacha job para manipulador                            |
-| [`dispatch_sync()`](#dispatch-sync)               | Despacha comando no processo atual                       |
-| [`e()`](#e)                                       | Codifica caracteres HTML para prevenir XSS               |
-| [`encrypt()`](#encrypt)                           | Criptografa valor                                        |
-| [`env()`](#env)                                   | Obtém valor de variável de ambiente                      |
-| [`event()`](#event)                               | Despacha evento e chama listeners                        |
-| [`fake()`](#fake)                                 | Obtém instância do faker para testes                     |
-| [`filled()`](#filled)                             | Verifica se valor está preenchido                        |
-| [`fluent()`](#fluent)                             | Cria objeto Fluent                                       |
-| [`head()`](#head)                                 | Obtém primeiro elemento do array                         |
-| [`info()`](#info)                                 | Escreve informações no log                               |
-| [`lang_path()`](#lang-path)                       | Obtém caminho da pasta de idiomas                        |
-| [`laravel_cloud()`](#laravel-cloud)               | Verifica se está rodando no Laravel Cloud                |
-| [`last()`](#last)                                 | Obtém último elemento do array                           |
-| [`literal()`](#literal)                           | Retorna objeto literal usando argumentos nomeados        |
-| [`logger()`](#logger)                             | Registra mensagem de debug nos logs                      |
-| [`logs()`](#logs)                                 | Obtém instância do driver de log                         |
-| [`method_field()`](#method-field)                 | Gera campo para falsificar verbo HTTP                    |
-| [`mix()`](#mix)                                   | Obtém caminho para arquivo versionado do Mix             |
-| [`now()`](#now)                                   | Cria instância Carbon para tempo atual                   |
-| [`object_get()`](#object-get)                     | Obtém item de objeto por notação de ponto                |
-| [`old()`](#old)                                   | Recupera item de entrada antigo                          |
-| [`once()`](#once)                                 | Garante execução única de callable                       |
-| [`optional()`](#optional)                         | Fornece acesso seguro a objetos opcionais                |
-| [`policy()`](#policy)                             | Obtém instância de policy                                |
-| [`precognitive()`](#precognitive)                 | Manipula hook de controller Precognition                 |
-| [`preg_replace_array()`](#preg-replace-array)     | Substitui padrão com valores do array                    |
-| [`public_path()`](#public-path)                   | Obtém caminho da pasta pública                           |
-| [`redirect()`](#redirect)                         | Obtém instância do redirecionador                        |
-| [`report()`](#report)                             | Reporta exceção                                          |
-| [`report_if()`](#report-if)                       | Reporta exceção se condição for verdadeira               |
-| [`report_unless()`](#report-unless)               | Reporta exceção a menos que condição seja verdadeira     |
-| [`request()`](#request)                           | Obtém instância da requisição atual                      |
-| [`rescue()`](#rescue)                             | Captura exceção e retorna valor padrão                   |
-| [`resolve()`](#resolve)                           | Resolve serviço do container                             |
-| [`resource_path()`](#resource-path)               | Obtém caminho da pasta de recursos                       |
-| [`response()`](#response)                         | Retorna nova resposta da aplicação                       |
-| [`retry()`](#retry)                               | Tenta executar operação múltiplas vezes                  |
-| [`route()`](#route)                               | Gera URL para rota nomeada                               |
-| [`secure_asset()`](#secure-asset)                 | Gera caminho de asset com HTTPS                          |
-| [`secure_url()`](#secure-url)                     | Gera URL HTTPS                                           |
-| [`session()`](#session)                           | Gerencia valores de sessão                               |
-| [`storage_path()`](#storage-path)                 | Obtém caminho da pasta de armazenamento                  |
-| [`str()`](#str)                                   | Obtém objeto stringable                                  |
-| [`tap()`](#tap)                                   | Chama Closure com valor e retorna valor                  |
-| [`throw_if()`](#throw-if)                         | Lança exceção se condição for verdadeira                 |
-| [`throw_unless()`](#throw-unless)                 | Lança exceção a menos que condição seja verdadeira       |
-| [`to_route()`](#to-route)                         | Cria redirecionamento para rota nomeada                  |
-| [`today()`](#today)                               | Cria instância Carbon para data atual                    |
-| [`trait_uses_recursive()`](#trait-uses-recursive) | Retorna traits usados por um trait                       |
-| [`trans()`](#trans)                               | Traduz mensagem                                          |
-| [`trans_choice()`](#trans-choice)                 | Traduz mensagem baseada em contagem                      |
-| [`transform()`](#transform)                       | Transforma valor se estiver presente                     |
-| [`url()`](#url)                                   | Gera URL para aplicação                                  |
-| [`validator()`](#validator)                       | Cria instância Validator                                 |
-| [`value()`](#value)                               | Retorna valor padrão (resolve Closures)                  |
-| [`view()`](#view)                                 | Obtém conteúdo da view avaliada                          |
-| [`when()`](#when)                                 | Retorna valor se condição for verdadeira                 |
-| [`windows_os()`](#windows-os)                     | Verifica se ambiente é baseado em Windows                |
-| [`with()`](#with)                                 | Retorna valor passado através de callback                |
+| Helper                                            | Descrição                                                  |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| [`__()`](#__)                                     | Traduz mensagem (alias para `trans()`)                     |
+| [`abort()`](#abort)                               | Lança `HttpException` com dados fornecidos                 |
+| [`abort_if()`](#abort-if)                         | Lança `HttpException` se condição for verdadeira           |
+| [`abort_unless()`](#abort-unless)                 | Lança `HttpException` a menos que condição seja verdadeira |
+| [`action()`](#action)                             | Gera URL para ação do controller                           |
+| [`app()`](#app)                                   | Obtém instância do container                               |
+| [`app_path()`](#app-path)                         | Obtém caminho da pasta da aplicação                        |
+| [`append_config()`](#append-config)               | Anexa itens de configuração                                |
+| [`asset()`](#asset)                               | Gera caminho de asset                                      |
+| [`auth()`](#auth)                                 | Obtém instância de autenticação                            |
+| [`back()`](#back)                                 | Redirecionamento para página anterior                      |
+| [`base_path()`](#base-path)                       | Obtém caminho base da instalação                           |
+| [`bcrypt()`](#bcrypt)                             | Faz hash usando algoritmo `bcrypt`                         |
+| [`blank()`](#blank)                               | Verifica se valor está vazio                               |
+| [`broadcast()`](#broadcast)                       | Inicia transmissão de evento                               |
+| [`cache()`](#cache)                               | Gerencia valores do cache                                  |
+| [`class_basename()`](#class-basename)             | Obtém nome base da classe                                  |
+| [`class_uses_recursive()`](#class-uses-recursive) | Retorna traits usados recursivamente                       |
+| [`collect()`](#collect)                           | Cria collection a partir de valor                          |
+| [`config()`](#config)                             | Gerencia valores de configuração                           |
+| [`config_path()`](#config-path)                   | Obtém caminho de configuração                              |
+| [`context()`](#context)                           | Gerencia contexto para logs                                |
+| [`cookie()`](#cookie)                             | Cria instância de cookie                                   |
+| [`csrf_field()`](#csrf-field)                     | Gera campo de formulário CSRF                              |
+| [`csrf_token()`](#csrf-token)                     | Obtém token CSRF                                           |
+| [`data_fill()`](#data-fill)                       | Preenche dados faltantes                                   |
+| [`data_forget()`](#data-forget)                   | Remove item por notação de ponto                           |
+| [`data_get()`](#data-get)                         | Obtém item por notação de ponto                            |
+| [`data_set()`](#data-set)                         | Define item por notação de ponto                           |
+| [`database_path()`](#database-path)               | Obtém caminho do banco de dados                            |
+| [`decrypt()`](#decrypt)                           | Descriptografa valor                                       |
+| [`defer()`](#defer)                               | Adia execução de callback                                  |
+| [`dispatch()`](#dispatch)                         | Despacha job para manipulador                              |
+| [`dispatch_sync()`](#dispatch-sync)               | Despacha comando no processo atual                         |
+| [`e()`](#e)                                       | Codifica caracteres HTML para prevenir XSS                 |
+| [`encrypt()`](#encrypt)                           | Criptografa valor                                          |
+| [`env()`](#env)                                   | Obtém valor de variável de ambiente                        |
+| [`event()`](#event)                               | Despacha evento e chama listeners                          |
+| [`fake()`](#fake)                                 | Obtém instância do faker para testes                       |
+| [`filled()`](#filled)                             | Verifica se valor está preenchido                          |
+| [`fluent()`](#fluent)                             | Cria objeto Fluent                                         |
+| [`head()`](#head)                                 | Obtém primeiro elemento do array                           |
+| [`info()`](#info)                                 | Escreve informações no log                                 |
+| [`lang_path()`](#lang-path)                       | Obtém caminho da pasta de idiomas                          |
+| [`laravel_cloud()`](#laravel-cloud)               | Verifica se está rodando no Laravel Cloud                  |
+| [`last()`](#last)                                 | Obtém último elemento do array                             |
+| [`literal()`](#literal)                           | Retorna objeto literal usando argumentos nomeados          |
+| [`logger()`](#logger)                             | Registra mensagem de debug nos logs                        |
+| [`logs()`](#logs)                                 | Obtém instância do driver de log                           |
+| [`method_field()`](#method-field)                 | Gera campo para falsificar verbo HTTP                      |
+| [`mix()`](#mix)                                   | Obtém caminho para arquivo versionado do Mix               |
+| [`now()`](#now)                                   | Cria instância Carbon para tempo atual                     |
+| [`object_get()`](#object-get)                     | Obtém item de objeto por notação de ponto                  |
+| [`old()`](#old)                                   | Recupera item de entrada antigo                            |
+| [`once()`](#once)                                 | Garante execução única de callable                         |
+| [`optional()`](#optional)                         | Fornece acesso seguro a objetos opcionais                  |
+| [`policy()`](#policy)                             | Obtém instância de policy                                  |
+| [`precognitive()`](#precognitive)                 | Manipula hook de controller Precognition                   |
+| [`preg_replace_array()`](#preg-replace-array)     | Substitui padrão com valores do array                      |
+| [`public_path()`](#public-path)                   | Obtém caminho da pasta pública                             |
+| [`redirect()`](#redirect)                         | Obtém instância do redirecionador                          |
+| [`report()`](#report)                             | Reporta exceção                                            |
+| [`report_if()`](#report-if)                       | Reporta exceção se condição for verdadeira                 |
+| [`report_unless()`](#report-unless)               | Reporta exceção a menos que condição seja verdadeira       |
+| [`request()`](#request)                           | Obtém instância da requisição atual                        |
+| [`rescue()`](#rescue)                             | Captura exceção e retorna valor padrão                     |
+| [`resolve()`](#resolve)                           | Resolve serviço do container                               |
+| [`resource_path()`](#resource-path)               | Obtém caminho da pasta de recursos                         |
+| [`response()`](#response)                         | Retorna nova resposta da aplicação                         |
+| [`retry()`](#retry)                               | Tenta executar operação múltiplas vezes                    |
+| [`route()`](#route)                               | Gera URL para rota nomeada                                 |
+| [`secure_asset()`](#secure-asset)                 | Gera caminho de asset com HTTPS                            |
+| [`secure_url()`](#secure-url)                     | Gera URL HTTPS                                             |
+| [`session()`](#session)                           | Gerencia valores de sessão                                 |
+| [`storage_path()`](#storage-path)                 | Obtém caminho da pasta de armazenamento                    |
+| [`str()`](#str)                                   | Obtém objeto stringable                                    |
+| [`tap()`](#tap)                                   | Chama Closure com valor e retorna valor                    |
+| [`throw_if()`](#throw-if)                         | Lança exceção se condição for verdadeira                   |
+| [`throw_unless()`](#throw-unless)                 | Lança exceção a menos que condição seja verdadeira         |
+| [`to_route()`](#to-route)                         | Cria redirecionamento para rota nomeada                    |
+| [`today()`](#today)                               | Cria instância Carbon para data atual                      |
+| [`trait_uses_recursive()`](#trait-uses-recursive) | Retorna traits usados por um trait                         |
+| [`trans()`](#trans)                               | Traduz mensagem                                            |
+| [`trans_choice()`](#trans-choice)                 | Traduz mensagem baseada em contagem                        |
+| [`transform()`](#transform)                       | Transforma valor se estiver presente                       |
+| [`url()`](#url)                                   | Gera URL para aplicação                                    |
+| [`validator()`](#validator)                       | Cria instância Validator                                   |
+| [`value()`](#value)                               | Retorna valor padrão (resolve Closures)                    |
+| [`view()`](#view)                                 | Obtém conteúdo da view avaliada                            |
+| [`when()`](#when)                                 | Retorna valor se condição for verdadeira                   |
+| [`windows_os()`](#windows-os)                     | Verifica se ambiente é baseado em Windows                  |
+| [`with()`](#with)                                 | Retorna valor passado através de callback                  |
 
 ---
 
