@@ -59,7 +59,7 @@
 | [`object_get()`](#object-get)                     | Obtém item de objeto por notação de ponto                  |
 | [`old()`](#old)                                   | Recupera item de entrada antigo                            |
 | [`once()`](#once)                                 | Garante execução única de callable                         |
-| [`optional()`](#optional)                         | Fornece acesso seguro a objetos opcionais                  |
+| [`optional()`](#optional)                         | Acesso seguro a propriedades/métodos sem erro de null                  |
 | [`policy()`](#policy)                             | Obtém instância de policy                                  |
 | [`precognitive()`](#precognitive)                 | Manipula hook de controller Precognition                   |
 | [`preg_replace_array()`](#preg-replace-array)     | Substitui padrão com valores do array                      |
