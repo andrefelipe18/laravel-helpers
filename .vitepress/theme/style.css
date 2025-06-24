@@ -1,0 +1,117 @@
+:root {
+  --vp-c-laravel-1: #ef4444; /* tom principal */
+  --vp-c-laravel-2: #dc2626; /* tom mais escuro */
+  --vp-c-laravel-3: #b91c1c; /* tom ainda mais escuro */
+  --vp-c-laravel-soft: #f87171; /* tom mais suave */
+
+  --vp-c-violet-1: #7c3aed;
+  --vp-c-violet-2: #a855f7;
+  --vp-c-violet-3: #9333ea;
+  --vp-c-violet-soft: #a855f7;
+
+  --vp-c-default-1: var(--vp-c-gray-1);
+  --vp-c-default-2: var(--vp-c-gray-2);
+  --vp-c-default-3: var(--vp-c-gray-3);
+  --vp-c-default-soft: var(--vp-c-gray-soft);
+
+  --vp-c-brand-1: var(--vp-c-laravel-1);
+  --vp-c-brand-2: var(--vp-c-laravel-2);
+  --vp-c-brand-3: var(--vp-c-laravel-3);
+  --vp-c-brand-soft: var(--vp-c-laravel-soft);
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+
+  --vp-c-warning-1: var(--vp-c-yellow-1);
+  --vp-c-warning-2: var(--vp-c-yellow-2);
+  --vp-c-warning-3: var(--vp-c-yellow-3);
+  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+
+  --vp-c-danger-1: var(--vp-c-violet-1);
+  --vp-c-danger-2: var(--vp-c-violet-2);
+  --vp-c-danger-3: var(--vp-c-violet-3);
+  --vp-c-danger-soft: var(--vp-c-violet-soft);
+}
+
+.dark {
+  --vp-c-bg: #0f172a !important;
+  --vp-c-bg-alt: #020617 !important;
+  --vp-c-bg-soft: #1e293b !important;
+}
+
+/**
+ * Component: Button
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+/**
+ * Component: Home
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    #7c3aed 30%,
+    #ea580c
+  );
+
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    #7c3aed 50%,
+    #ea580c 50%
+  );
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(68px);
+  }
+}
+
+.image-bg {
+  opacity: 0.3 !important;
+}
+
+/**
+ * Component: Custom Block
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-custom-block-tip-border: transparent;
+  --vp-custom-block-tip-text: var(--vp-c-text-1);
+  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+  --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
+}
+
+/**
+ * Component: Algolia
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+  --docsearch-primary-color: var(--vp-c-brand-1) !important;
+}
+
+a.title {
+  display: none !important;
+}
