@@ -1,1793 +1,1620 @@
-# Laravel Helpers - Guia Completo
+# Laravel Helpers - Complete Guide
 
-## Índice de Helpers
+## Helper Index
 
-| Helper                                            | Descrição                                                  |
-| ------------------------------------------------- | ---------------------------------------------------------- |
-| [`__()`](#__)                                     | Traduz mensagem (alias para `trans()`)                     |
-| [`abort()`](#abort)                               | Lança `HttpException` com dados fornecidos                 |
-| [`abort_if()`](#abort-if)                         | Lança `HttpException` se condição for verdadeira           |
-| [`abort_unless()`](#abort-unless)                 | Lança `HttpException` a menos que condição seja verdadeira |
-| [`action()`](#action)                             | Gera URL para ação do controller                           |
-| [`app()`](#app)                                   | Obtém instância do container                               |
-| [`app_path()`](#app-path)                         | Obtém caminho da pasta da aplicação                        |
-| [`append_config()`](#append-config)               | Anexa itens de configuração                                |
-| [`asset()`](#asset)                               | Gera caminho de asset                                      |
-| [`auth()`](#auth)                                 | Obtém instância de autenticação                            |
-| [`back()`](#back)                                 | Redirecionamento para página anterior                      |
-| [`base_path()`](#base-path)                       | Obtém caminho base da instalação                           |
-| [`bcrypt()`](#bcrypt)                             | Faz hash usando algoritmo `bcrypt`                         |
-| [`blank()`](#blank)                               | Verifica se valor está vazio                               |
-| [`broadcast()`](#broadcast)                       | Inicia transmissão de evento                               |
-| [`cache()`](#cache)                               | Gerencia valores do cache                                  |
-| [`class_basename()`](#class-basename)             | Obtém nome base da classe                                  |
-| [`class_uses_recursive()`](#class-uses-recursive) | Retorna traits usados recursivamente                       |
-| [`collect()`](#collect)                           | Cria collection a partir de valor                          |
-| [`config()`](#config)                             | Gerencia valores de configuração                           |
-| [`config_path()`](#config-path)                   | Obtém caminho de configuração                              |
-| [`context()`](#context)                           | Gerencia contexto para logs                                |
-| [`cookie()`](#cookie)                             | Cria instância de cookie                                   |
-| [`csrf_field()`](#csrf-field)                     | Gera campo de formulário CSRF                              |
-| [`csrf_token()`](#csrf-token)                     | Obtém token CSRF                                           |
-| [`data_fill()`](#data-fill)                       | Preenche dados faltantes                                   |
-| [`data_forget()`](#data-forget)                   | Remove item por notação de ponto                           |
-| [`data_get()`](#data-get)                         | Obtém item por notação de ponto                            |
-| [`data_set()`](#data-set)                         | Define item por notação de ponto                           |
-| [`database_path()`](#database-path)               | Obtém caminho do banco de dados                            |
-| [`decrypt()`](#decrypt)                           | Descriptografa valor                                       |
-| [`defer()`](#defer)                               | Adia execução de callback                                  |
-| [`dispatch()`](#dispatch)                         | Despacha job para manipulador                              |
-| [`dispatch_sync()`](#dispatch-sync)               | Despacha comando no processo atual                         |
-| [`e()`](#e)                                       | Codifica caracteres HTML para prevenir XSS                 |
-| [`encrypt()`](#encrypt)                           | Criptografa valor                                          |
-| [`env()`](#env)                                   | Obtém valor de variável de ambiente                        |
-| [`event()`](#event)                               | Despacha evento e chama listeners                          |
-| [`fake()`](#fake)                                 | Obtém instância do faker para testes                       |
-| [`filled()`](#filled)                             | Verifica se valor está preenchido                          |
-| [`fluent()`](#fluent)                             | Cria objeto Fluent                                         |
-| [`head()`](#head)                                 | Obtém primeiro elemento do array                           |
-| [`info()`](#info)                                 | Escreve informações no log                                 |
-| [`lang_path()`](#lang-path)                       | Obtém caminho da pasta de idiomas                          |
-| [`laravel_cloud()`](#laravel-cloud)               | Verifica se está rodando no Laravel Cloud                  |
-| [`last()`](#last)                                 | Obtém último elemento do array                             |
-| [`literal()`](#literal)                           | Retorna objeto literal usando argumentos nomeados          |
-| [`logger()`](#logger)                             | Registra mensagem de debug nos logs                        |
-| [`logs()`](#logs)                                 | Obtém instância do driver de log                           |
-| [`method_field()`](#method-field)                 | Gera campo para falsificar verbo HTTP                      |
-| [`mix()`](#mix)                                   | Obtém caminho para arquivo versionado do Mix               |
-| [`now()`](#now)                                   | Cria instância Carbon para tempo atual                     |
-| [`object_get()`](#object-get)                     | Obtém item de objeto por notação de ponto                  |
-| [`old()`](#old)                                   | Recupera item de entrada antigo                            |
-| [`once()`](#once)                                 | Garante execução única de callable                         |
-| [`optional()`](#optional)                         | Acesso seguro a propriedades/métodos sem erro de null                  |
-| [`policy()`](#policy)                             | Obtém instância de policy                                  |
-| [`precognitive()`](#precognitive)                 | Manipula hook de controller Precognition                   |
-| [`preg_replace_array()`](#preg-replace-array)     | Substitui padrão com valores do array                      |
-| [`public_path()`](#public-path)                   | Obtém caminho da pasta pública                             |
-| [`redirect()`](#redirect)                         | Obtém instância do redirecionador                          |
-| [`report()`](#report)                             | Reporta exceção                                            |
-| [`report_if()`](#report-if)                       | Reporta exceção se condição for verdadeira                 |
-| [`report_unless()`](#report-unless)               | Reporta exceção a menos que condição seja verdadeira       |
-| [`request()`](#request)                           | Obtém instância da requisição atual                        |
-| [`rescue()`](#rescue)                             | Captura exceção e retorna valor padrão                     |
-| [`resolve()`](#resolve)                           | Resolve serviço do container                               |
-| [`resource_path()`](#resource-path)               | Obtém caminho da pasta de recursos                         |
-| [`response()`](#response)                         | Retorna nova resposta da aplicação                         |
-| [`retry()`](#retry)                               | Tenta executar operação múltiplas vezes                    |
-| [`route()`](#route)                               | Gera URL para rota nomeada                                 |
-| [`secure_asset()`](#secure-asset)                 | Gera caminho de asset com HTTPS                            |
-| [`secure_url()`](#secure-url)                     | Gera URL HTTPS                                             |
-| [`session()`](#session)                           | Gerencia valores de sessão                                 |
-| [`storage_path()`](#storage-path)                 | Obtém caminho da pasta de armazenamento                    |
-| [`str()`](#str)                                   | Obtém objeto stringable                                    |
-| [`tap()`](#tap)                                   | Chama Closure com valor e retorna valor                    |
-| [`throw_if()`](#throw-if)                         | Lança exceção se condição for verdadeira                   |
-| [`throw_unless()`](#throw-unless)                 | Lança exceção a menos que condição seja verdadeira         |
-| [`to_route()`](#to-route)                         | Cria redirecionamento para rota nomeada                    |
-| [`today()`](#today)                               | Cria instância Carbon para data atual                      |
-| [`trait_uses_recursive()`](#trait-uses-recursive) | Retorna traits usados por um trait                         |
-| [`trans()`](#trans)                               | Traduz mensagem                                            |
-| [`trans_choice()`](#trans-choice)                 | Traduz mensagem baseada em contagem                        |
-| [`transform()`](#transform)                       | Transforma valor se estiver presente                       |
-| [`url()`](#url)                                   | Gera URL para aplicação                                    |
-| [`validator()`](#validator)                       | Cria instância Validator                                   |
-| [`value()`](#value)                               | Retorna valor padrão (resolve Closures)                    |
-| [`view()`](#view)                                 | Obtém conteúdo da view avaliada                            |
-| [`when()`](#when)                                 | Retorna valor se condição for verdadeira                   |
-| [`windows_os()`](#windows-os)                     | Verifica se ambiente é baseado em Windows                  |
-| [`with()`](#with)                                 | Retorna valor passado através de callback                  |
+| Helper                                            | Description                                          |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| [`__()`](#__)                                     | Translate message (alias for `trans()`)              |
+| [`abort()`](#abort)                               | Throw `HttpException` with given data                |
+| [`abort_if()`](#abort-if)                         | Throw `HttpException` if condition is true           |
+| [`abort_unless()`](#abort-unless)                 | Throw `HttpException` unless condition is true       |
+| [`action()`](#action)                             | Generate URL for controller action                   |
+| [`app()`](#app)                                   | Get container instance                               |
+| [`app_path()`](#app-path)                         | Get path to application folder                       |
+| [`append_config()`](#append-config)               | Append configuration items                           |
+| [`asset()`](#asset)                               | Generate asset path                                  |
+| [`auth()`](#auth)                                 | Get authentication instance                          |
+| [`back()`](#back)                                 | Redirect to previous page                            |
+| [`base_path()`](#base-path)                       | Get base path of installation                        |
+| [`bcrypt()`](#bcrypt)                             | Hash using `bcrypt` algorithm                        |
+| [`blank()`](#blank)                               | Check if value is empty                              |
+| [`broadcast()`](#broadcast)                       | Start event broadcast                                |
+| [`cache()`](#cache)                               | Manage cache values                                  |
+| [`class_basename()`](#class-basename)             | Get base name of class                               |
+| [`class_uses_recursive()`](#class-uses-recursive) | Return traits used recursively                       |
+| [`collect()`](#collect)                           | Create collection from value                         |
+| [`config()`](#config)                             | Manage configuration values                          |
+| [`config_path()`](#config-path)                   | Get configuration path                               |
+| [`context()`](#context)                           | Manage context for logging                           |
+| [`cookie()`](#cookie)                             | Create cookie instance                               |
+| [`csrf_field()`](#csrf-field)                     | Generate CSRF form field                             |
+| [`csrf_token()`](#csrf-token)                     | Get CSRF token                                       |
+| [`data_fill()`](#data-fill)                       | Fill missing data                                    |
+| [`data_forget()`](#data-forget)                   | Remove item using dot notation                       |
+| [`data_get()`](#data-get)                         | Get item using dot notation                          |
+| [`data_set()`](#data-set)                         | Set item using dot notation                          |
+| [`database_path()`](#database-path)               | Get database path                                    |
+| [`decrypt()`](#decrypt)                           | Decrypt value                                        |
+| [`defer()`](#defer)                               | Defer callback execution                             |
+| [`dispatch()`](#dispatch)                         | Dispatch job to handler                              |
+| [`dispatch_sync()`](#dispatch-sync)               | Dispatch command in current process                  |
+| [`e()`](#e)                                       | Encode HTML characters to prevent XSS                |
+| [`encrypt()`](#encrypt)                           | Encrypt value                                        |
+| [`env()`](#env)                                   | Get environment variable value                       |
+| [`event()`](#event)                               | Dispatch event and call listeners                    |
+| [`fake()`](#fake)                                 | Get faker instance for testing                       |
+| [`filled()`](#filled)                             | Check if value is filled                             |
+| [`fluent()`](#fluent)                             | Create Fluent object                                 |
+| [`head()`](#head)                                 | Get first element of array                           |
+| [`info()`](#info)                                 | Write information to log                             |
+| [`lang_path()`](#lang-path)                       | Get language folder path                             |
+| [`laravel_cloud()`](#laravel-cloud)               | Check if running on Laravel Cloud                    |
+| [`last()`](#last)                                 | Get last element of array                            |
+| [`literal()`](#literal)                           | Return literal object using named arguments          |
+| [`logger()`](#logger)                             | Log debug message                                    |
+| [`logs()`](#logs)                                 | Get log driver instance                              |
+| [`method_field()`](#method-field)                 | Generate field to fake HTTP verb                     |
+| [`mix()`](#mix)                                   | Get path to versioned Mix file                       |
+| [`now()`](#now)                                   | Create Carbon instance for current time              |
+| [`object_get()`](#object-get)                     | Get item from object using dot notation              |
+| [`old()`](#old)                                   | Retrieve old input item                              |
+| [`once()`](#once)                                 | Ensure callable executes only once                   |
+| [`optional()`](#optional)                         | Safe access to properties/methods without null error |
+| [`policy()`](#policy)                             | Get policy instance                                  |
+| [`precognitive()`](#precognitive)                 | Handle Precognition controller hook                  |
+| [`preg_replace_array()`](#preg-replace-array)     | Replace pattern with array values                    |
+| [`public_path()`](#public-path)                   | Get public folder path                               |
+| [`redirect()`](#redirect)                         | Get redirector instance                              |
+| [`report()`](#report)                             | Report exception                                     |
+| [`report_if()`](#report-if)                       | Report exception if condition is true                |
+| [`report_unless()`](#report-unless)               | Report exception unless condition is true            |
+| [`request()`](#request)                           | Get current request instance                         |
+| [`rescue()`](#rescue)                             | Catch exception and return default value             |
+| [`resolve()`](#resolve)                           | Resolve service from container                       |
+| [`resource_path()`](#resource-path)               | Get resources folder path                            |
+| [`response()`](#response)                         | Return new application response                      |
+| [`retry()`](#retry)                               | Try to execute operation multiple times              |
+| [`route()`](#route)                               | Generate URL for named route                         |
+| [`secure_asset()`](#secure-asset)                 | Generate asset path with HTTPS                       |
+| [`secure_url()`](#secure-url)                     | Generate HTTPS URL                                   |
+| [`session()`](#session)                           | Manage session values                                |
+| [`storage_path()`](#storage-path)                 | Get storage folder path                              |
+| [`str()`](#str)                                   | Get stringable object                                |
+| [`tap()`](#tap)                                   | Call Closure with value and return value             |
+| [`throw_if()`](#throw-if)                         | Throw exception if condition is true                 |
+| [`throw_unless()`](#throw-unless)                 | Throw exception unless condition is true             |
+| [`to_route()`](#to-route)                         | Create redirect to named route                       |
+| [`today()`](#today)                               | Create Carbon instance for current date              |
+| [`trait_uses_recursive()`](#trait-uses-recursive) | Return traits used by a trait                        |
+| [`trans()`](#trans)                               | Translate message                                    |
+| [`trans_choice()`](#trans-choice)                 | Translate message based on count                     |
+| [`transform()`](#transform)                       | Transform value if present                           |
+| [`url()`](#url)                                   | Generate URL for application                         |
+| [`validator()`](#validator)                       | Create Validator instance                            |
+| [`value()`](#value)                               | Return default value (resolve Closures)              |
+| [`view()`](#view)                                 | Get evaluated view content                           |
+| [`when()`](#when)                                 | Return value if condition is true                    |
+| [`windows_os()`](#windows-os)                     | Check if environment is Windows-based                |
+| [`with()`](#with)                                 | Return value passed through callback                 |
 
 ---
 
-## Helpers por Categoria
+## Helpers by Category
 
-### Assets e Mix
+### Assets and Mix
 
 #### `fake()`
 
-Obtém uma instância do faker para testes e geração de dados fictícios.
+Get a faker instance for testing and generating fake data.
 
 ```php
-// Gerar nome falso
-$nome = fake()->name();
+// Generate fake name
+$name = fake()->name();
 
-// Gerar email falso
+// Generate fake email
 $email = fake()->email();
 
-// Gerar texto falso
-$texto = fake()->text(200);
+// Generate fake text
+$text = fake()->text(200);
 ```
 
 #### `mix()`
 
-Obtém o caminho para um arquivo versionado do Laravel Mix, incluindo o hash de versão para cache busting.
+Get the path to a versioned Laravel Mix file, including version hash for cache busting.
 
 ```php
-// Caminho para arquivo CSS versionado
+// Path to versioned CSS file
 echo mix('css/app.css'); // /css/app.css?id=abc123
 
-// Caminho para arquivo JS versionado
+// Path to versioned JS file
 echo mix('js/app.js'); // /js/app.js?id=def456
 ```
 
-### Autenticação e Autorização
+### Authentication and Authorization
 
 #### `auth()`
 
-Obtém a instância de autenticação disponível ou um guard específico.
+Get the available authentication instance or a specific guard.
 
 ```php
-// Obter usuário autenticado
+// Get authenticated user
 $user = auth()->user();
 
-// Verificar se está autenticado
+// Check if authenticated
 if (auth()->check()) {
-    // Usuário está logado
+    // User is logged in
 }
 
-// Usar guard específico
+// Use specific guard
 $admin = auth('admin')->user();
 ```
 
 #### `policy()`
 
-Obtém uma instância de policy para uma classe fornecida.
+Get a policy instance for authorization.
 
 ```php
-// Obter policy para modelo Post
-$policy = policy(Post::class);
+// Get user policy
+$policy = policy(User::class);
 
-// Verificar permissão
-if ($policy->update($user, $post)) {
-    // Usuário pode atualizar o post
+// Check permission
+if ($policy->view($user, $post)) {
+    // User can view post
 }
 ```
 
-### Caminhos do Sistema
+### URL Generation
+
+#### `action()`
+
+Generate a URL for a controller action.
+
+```php
+// URL for controller action
+$url = action([UserController::class, 'show'], ['id' => 1]);
+// /user/1
+
+// URL with additional parameters
+$url = action([UserController::class, 'edit'], ['user' => 1], false);
+// user/1/edit (relative URL)
+```
+
+#### `asset()`
+
+Generate a URL for an application asset.
+
+```php
+// Asset URL
+echo asset('css/app.css'); // /css/app.css
+
+// Asset with subdomain
+echo asset('images/logo.png'); // /images/logo.png
+```
+
+#### `route()`
+
+Generate a URL for a named route.
+
+```php
+// Named route URL
+$url = route('user.show', ['id' => 1]);
+
+// Route with parameters
+$url = route('user.edit', ['user' => $user]);
+
+// Absolute URL
+$url = route('user.show', ['id' => 1], true);
+```
+
+#### `secure_asset()`
+
+Generate a URL for an application asset using HTTPS.
+
+```php
+// Secure asset URL
+echo secure_asset('css/app.css'); // https://example.com/css/app.css
+```
+
+#### `secure_url()`
+
+Generate a fully qualified HTTPS URL for the application.
+
+```php
+// Secure URL
+echo secure_url('user/profile'); // https://example.com/user/profile
+
+// Secure URL with parameters
+echo secure_url('user/profile', ['tab' => 'settings']);
+```
+
+#### `url()`
+
+Generate a fully qualified URL for the application.
+
+```php
+// Generate URL
+echo url('user/profile'); // http://example.com/user/profile
+
+// URL with parameters
+echo url('user/profile', ['tab' => 'settings']);
+// http://example.com/user/profile?tab=settings
+
+// Secure URL
+echo url('user/profile', [], true); // https://example.com/user/profile
+```
+
+### Response and Redirect
+
+#### `abort()`
+
+Throw an HTTP exception.
+
+```php
+// 404 error
+abort(404);
+
+// 403 error with message
+abort(403, 'Unauthorized action.');
+
+// 500 error with headers
+abort(500, 'Server Error', ['X-Custom-Header' => 'value']);
+```
+
+#### `abort_if()`
+
+Throw an HTTP exception if a condition is true.
+
+```php
+// Abort if user is not admin
+abort_if(!auth()->user()->isAdmin(), 403);
+
+// Abort with custom message
+abort_if($errors->any(), 422, 'Validation failed');
+```
+
+#### `abort_unless()`
+
+Throw an HTTP exception unless a condition is true.
+
+```php
+// Abort unless user owns the post
+abort_unless($user->owns($post), 403);
+
+// Abort unless authenticated
+abort_unless(auth()->check(), 401, 'Authentication required');
+```
+
+#### `back()`
+
+Create a redirect response to the user's previous location.
+
+```php
+// Redirect back
+return back();
+
+// Redirect back with data
+return back()->with('success', 'Profile updated!');
+
+// Redirect back with input
+return back()->withInput();
+
+// Redirect back with errors
+return back()->withErrors(['email' => 'Invalid email']);
+```
+
+#### `redirect()`
+
+Get an instance of the redirector.
+
+```php
+// Simple redirect
+return redirect('/home');
+
+// Redirect to named route
+return redirect()->route('user.show', ['id' => 1]);
+
+// Redirect to controller action
+return redirect()->action([UserController::class, 'index']);
+
+// Redirect with data
+return redirect('/home')->with('success', 'Welcome!');
+```
+
+#### `response()`
+
+Return a new response from the application.
+
+```php
+// Simple response
+return response('Hello World');
+
+// JSON response
+return response()->json(['message' => 'Success']);
+
+// Response with status and headers
+return response('Not Found', 404, ['Content-Type' => 'text/plain']);
+
+// Download response
+return response()->download('/path/to/file.pdf');
+```
+
+#### `to_route()`
+
+Create a redirect response to a named route.
+
+```php
+// Redirect to named route
+return to_route('user.show', ['id' => 1]);
+
+// Redirect with status code
+return to_route('user.index', [], 302);
+```
+
+### Application Paths
 
 #### `app_path()`
 
-Obtém o caminho para a pasta da aplicação com possibilidade de especificar um arquivo ou subpasta.
+Get the path to the application folder.
 
 ```php
-// Caminho da pasta app
-echo app_path(); // /caminho/para/app
+// App directory path
+$path = app_path(); // /path/to/app
 
-// Caminho para arquivo específico
-echo app_path('Models/User.php'); // /caminho/para/app/Models/User.php
-
-// Caminho para subpasta
-echo app_path('Http/Controllers'); // /caminho/para/app/Http/Controllers
+// Path to specific file
+$path = app_path('Http/Controllers/UserController.php');
+// /path/to/app/Http/Controllers/UserController.php
 ```
 
 #### `base_path()`
 
-Obtém o caminho para a base da instalação do Laravel.
+Get the path to the project root.
 
 ```php
-// Caminho base do projeto
-echo base_path(); // /caminho/para/projeto
+// Base path
+$path = base_path(); // /path/to/project
 
-// Caminho para composer.json
-echo base_path('composer.json'); // /caminho/para/projeto/composer.json
+// Path to specific file
+$path = base_path('composer.json'); // /path/to/project/composer.json
 ```
 
 #### `config_path()`
 
-Obtém o caminho para a pasta de configuração.
+Get the path to the configuration folder.
 
 ```php
-// Caminho da pasta config
-echo config_path(); // /caminho/para/config
+// Config directory path
+$path = config_path(); // /path/to/config
 
-// Caminho para arquivo específico
-echo config_path('services.php'); // /caminho/para/config/services.php
+// Path to specific config file
+$path = config_path('app.php'); // /path/to/config/app.php
 ```
 
 #### `database_path()`
 
-Obtém o caminho para a pasta do banco de dados.
+Get the path to the database folder.
 
 ```php
-// Caminho da pasta database
-echo database_path(); // /caminho/para/database
+// Database directory path
+$path = database_path(); // /path/to/database
 
-// Caminho para migrations
-echo database_path('migrations'); // /caminho/para/database/migrations
+// Path to specific file
+$path = database_path('migrations'); // /path/to/database/migrations
 ```
 
 #### `lang_path()`
 
-Obtém o caminho para a pasta de idiomas/traduções.
+Get the path to the language folder.
 
 ```php
-// Caminho da pasta lang
-echo lang_path(); // /caminho/para/lang
+// Language directory path
+$path = lang_path(); // /path/to/lang
 
-// Caminho para idioma específico
-echo lang_path('pt'); // /caminho/para/lang/pt
+// Path to specific language file
+$path = lang_path('en/messages.php'); // /path/to/lang/en/messages.php
 ```
 
 #### `public_path()`
 
-Obtém o caminho para a pasta pública.
+Get the path to the public folder.
 
 ```php
-// Caminho da pasta public
-echo public_path(); // /caminho/para/public
+// Public directory path
+$path = public_path(); // /path/to/public
 
-// Caminho para arquivo específico
-echo public_path('images/logo.png'); // /caminho/para/public/images/logo.png
+// Path to specific file
+$path = public_path('css/app.css'); // /path/to/public/css/app.css
 ```
 
 #### `resource_path()`
 
-Obtém o caminho para a pasta de recursos.
+Get the path to the resources folder.
 
 ```php
-// Caminho da pasta resources
-echo resource_path(); // /caminho/para/resources
+// Resources directory path
+$path = resource_path(); // /path/to/resources
 
-// Caminho para views
-echo resource_path('views'); // /caminho/para/resources/views
+// Path to specific file
+$path = resource_path('views/welcome.blade.php');
+// /path/to/resources/views/welcome.blade.php
 ```
 
 #### `storage_path()`
 
-Obtém o caminho para a pasta de armazenamento.
+Get the path to the storage folder.
 
 ```php
-// Caminho da pasta storage
-echo storage_path(); // /caminho/para/storage
+// Storage directory path
+$path = storage_path(); // /path/to/storage
 
-// Caminho para uploads
-echo storage_path('app/uploads'); // /caminho/para/storage/app/uploads
+// Path to specific file
+$path = storage_path('app/file.txt'); // /path/to/storage/app/file.txt
 ```
 
-### Configuração e Ambiente
-
-#### `append_config()`
-
-Atribui IDs numéricos altos a itens de configuração para forçar anexação.
-
-```php
-// Anexar configurações
-append_config(['item1', 'item2']);
-
-// Anexar array associativo
-append_config([
-    'services.custom' => 'value1',
-    'app.providers' => 'MyProvider'
-]);
-```
-
-#### `config()`
-
-Obtém ou define valores de configuração especificados.
-
-```php
-// Obter configuração
-$appName = config('app.name');
-
-// Obter com valor padrão
-$debug = config('app.debug', false);
-
-// Definir configuração
-config(['app.name' => 'Minha App']);
-
-// Definir múltiplas configurações
-config([
-    'app.name' => 'Nova App',
-    'app.env' => 'production'
-]);
-```
-
-#### `env()`
-
-Obtém o valor de uma variável de ambiente com possibilidade de valor padrão.
-
-```php
-// Obter variável de ambiente
-$appName = env('APP_NAME');
-
-// Com valor padrão
-$debug = env('APP_DEBUG', false);
-
-// Diferentes tipos
-$port = env('DB_PORT', 3306);
-$host = env('DB_HOST', 'localhost');
-```
-
-#### `laravel_cloud()`
-
-Determina se a aplicação está rodando no Laravel Cloud.
-
-```php
-if (laravel_cloud()) {
-    // Configurações específicas para Laravel Cloud
-    $config = 'cloud-config';
-} else {
-    // Configurações para outros ambientes
-    $config = 'local-config';
-}
-```
-
-#### `windows_os()`
-
-Determina se o ambiente atual é baseado em Windows.
-
-```php
-if (windows_os()) {
-    // Comandos específicos para Windows
-    $separator = '\\';
-} else {
-    // Comandos para Unix/Linux
-    $separator = '/';
-}
-```
-
-### Container e Dependências
+### Container and Services
 
 #### `app()`
 
-Obtém a instância do container da aplicação ou resolve um serviço específico.
+Get the available container instance or resolve a service.
 
 ```php
-// Obter container
+// Get application instance
 $app = app();
 
-// Resolver serviço
-$config = app('config');
+// Resolve service from container
+$cache = app('cache');
 
-// Resolver com parâmetros
-$service = app('App\Services\CustomService');
-
-// Verificar se está bound
-if (app()->bound('custom.service')) {
-    $service = app('custom.service');
-}
+// Resolve with parameters
+$service = app(UserService::class, ['param' => 'value']);
 ```
 
 #### `resolve()`
 
-Resolve um serviço ou classe do container de dependências.
+Resolve a service from the container.
 
 ```php
-// Resolver classe
-$service = resolve('App\Services\PaymentService');
+// Resolve service
+$cache = resolve('cache');
 
-// Resolver interface
-$repository = resolve('App\Contracts\UserRepositoryInterface');
+// Resolve class
+$service = resolve(UserService::class);
+```
 
-// Resolver com parâmetros
-$service = resolve('App\Services\CustomService', [
-    'parameter' => 'value'
+### Configuration
+
+#### `config()`
+
+Get or set configuration values.
+
+```php
+// Get configuration value
+$timezone = config('app.timezone');
+
+// Get with default value
+$debug = config('app.debug', false);
+
+// Set configuration value
+config(['app.locale' => 'en']);
+
+// Set multiple values
+config([
+    'app.timezone' => 'UTC',
+    'app.locale' => 'en'
 ]);
 ```
 
-### Controle de Fluxo
+#### `append_config()`
+
+Append configuration items to an array configuration value.
+
+```php
+// Append to array config
+append_config(['app.providers' => [
+    CustomServiceProvider::class
+]]);
+```
+
+#### `env()`
+
+Get the value of an environment variable.
+
+```php
+// Get environment variable
+$debug = env('APP_DEBUG');
+
+// Get with default value
+$debug = env('APP_DEBUG', false);
+
+// Environment variable with type casting
+$timeout = env('SESSION_LIFETIME', 120);
+```
+
+### Caching
+
+#### `cache()`
+
+Get or store values in the cache.
+
+```php
+// Get cache value
+$value = cache('key');
+
+// Get with default
+$value = cache('key', 'default');
+
+// Store in cache
+cache(['key' => 'value'], now()->addHour());
+
+// Store with tags
+cache()->tags(['users', 'posts'])->put('key', 'value', 3600);
+```
+
+### Session
+
+#### `session()`
+
+Get or store session values.
+
+```php
+// Get session value
+$value = session('key');
+
+// Get with default
+$value = session('key', 'default');
+
+// Store in session
+session(['key' => 'value']);
+
+// Flash data to session
+session()->flash('message', 'Success!');
+```
+
+#### `old()`
+
+Retrieve a flashed input value from the session.
+
+```php
+// Get old input
+$email = old('email');
+
+// Get with default
+$name = old('name', 'John Doe');
+
+// In Blade template
+<input type="email" name="email" value="{{ old('email') }}">
+```
+
+### Cookies
+
+#### `cookie()`
+
+Create a new cookie instance.
+
+```php
+// Create cookie
+$cookie = cookie('name', 'value', 60);
+
+// Cookie with domain and secure
+$cookie = cookie('name', 'value', 60, '/', '.domain.com', true, true);
+
+// Queue cookie for next response
+cookie()->queue('name', 'value', 60);
+```
+
+### CSRF Protection
+
+#### `csrf_field()`
+
+Generate an HTML hidden input field containing the CSRF token.
+
+```php
+// In Blade template
+{{ csrf_field() }}
+
+// Outputs: <input type="hidden" name="_token" value="...">
+```
+
+#### `csrf_token()`
+
+Get the CSRF token value.
+
+```php
+// Get CSRF token
+$token = csrf_token();
+
+// In JavaScript
+const token = '{{ csrf_token() }}';
+```
+
+#### `method_field()`
+
+Generate an HTML hidden input field containing the HTTP verb.
+
+```php
+// In Blade template for PUT request
+{{ method_field('PUT') }}
+
+// Outputs: <input type="hidden" name="_method" value="PUT">
+
+// For DELETE request
+{{ method_field('DELETE') }}
+```
+
+### Request and Input
+
+#### `request()`
+
+Get the current request instance or an input value.
+
+```php
+// Get request instance
+$request = request();
+
+// Get input value
+$email = request('email');
+
+// Get with default
+$name = request('name', 'Guest');
+
+// Get all input
+$input = request()->all();
+```
+
+### Validation
+
+#### `validator()`
+
+Create a validator instance.
+
+```php
+// Create validator
+$validator = validator(['email' => 'test@example.com'], [
+    'email' => 'required|email'
+]);
+
+// Check if validation passes
+if ($validator->passes()) {
+    // Validation passed
+}
+
+// Get validation errors
+$errors = $validator->errors();
+```
+
+### Date and Time
+
+#### `now()`
+
+Create a Carbon instance for the current date and time.
+
+```php
+// Current timestamp
+$now = now();
+
+// Current timestamp in specific timezone
+$now = now('America/New_York');
+
+// Format current time
+echo now()->format('Y-m-d H:i:s');
+
+// Add time
+$future = now()->addHours(2);
+```
+
+#### `today()`
+
+Create a Carbon instance for the current date.
+
+```php
+// Today's date
+$today = today();
+
+// Today in specific timezone
+$today = today('America/New_York');
+
+// Format today's date
+echo today()->format('Y-m-d');
+
+// Start of day
+$startOfDay = today()->startOfDay();
+```
+
+### Localization
+
+#### `__()`
+
+Translate the given message (alias for `trans()`).
+
+```php
+// Simple translation
+echo __('Welcome');
+
+// Translation with parameters
+echo __('Welcome, :name', ['name' => 'John']);
+
+// Translation from specific file
+echo __('messages.welcome');
+
+// Translation with fallback
+echo __('messages.welcome', [], 'en');
+```
+
+#### `trans()`
+
+Translate the given message.
+
+```php
+// Simple translation
+echo trans('Welcome');
+
+// Translation with parameters
+echo trans('Welcome, :name', ['name' => 'John']);
+
+// Translation from specific file
+echo trans('messages.welcome');
+```
+
+#### `trans_choice()`
+
+Translate the given message based on a count.
+
+```php
+// Pluralization
+echo trans_choice('messages.notifications', $count);
+
+// With parameters
+echo trans_choice('messages.notifications', $count, ['name' => 'John']);
+
+// Manual count specification
+echo trans_choice('messages.items', 5, ['count' => 5]);
+```
+
+### Logging
+
+#### `info()`
+
+Write an informational message to the logs.
+
+```php
+// Simple info log
+info('User logged in');
+
+// Info with context
+info('User logged in', ['user_id' => 123]);
+
+// Info with additional data
+info('Processing payment', [
+    'amount' => 100,
+    'currency' => 'USD',
+    'user_id' => 123
+]);
+```
+
+#### `logger()`
+
+Log a debug message to the logs or get a logger instance.
+
+```php
+// Log debug message
+logger('Debug information');
+
+// Log with context
+logger('User action', ['action' => 'login', 'user_id' => 123]);
+
+// Get logger instance
+$logger = logger();
+$logger->error('Error message');
+```
+
+#### `logs()`
+
+Get a log driver instance.
+
+```php
+// Get default log driver
+$log = logs();
+
+// Get specific driver
+$slackLog = logs('slack');
+
+// Log with specific driver
+logs('slack')->info('Important notification');
+```
+
+#### `report()`
+
+Report an exception to the exception handler.
+
+```php
+// Report exception
+try {
+    // Some code that might fail
+} catch (Exception $e) {
+    report($e);
+}
+
+// Report with context
+report($exception, ['user_id' => auth()->id()]);
+```
+
+#### `report_if()`
+
+Report an exception if a given condition is true.
+
+```php
+// Report exception if condition is true
+report_if($shouldReport, $exception);
+
+// Report with context
+report_if(app()->isProduction(), $exception, ['context' => 'production']);
+```
+
+#### `report_unless()`
+
+Report an exception unless a given condition is true.
+
+```php
+// Report exception unless condition is true
+report_unless($shouldIgnore, $exception);
+
+// Report unless in testing
+report_unless(app()->runningUnitTests(), $exception);
+```
+
+### Events and Broadcasting
+
+#### `broadcast()`
+
+Begin broadcasting an event.
+
+```php
+// Broadcast event
+broadcast(new OrderUpdated($order));
+
+// Broadcast to specific channels
+broadcast(new OrderUpdated($order))->to(['order.' . $order->id]);
+
+// Broadcast with delay
+broadcast(new OrderUpdated($order))->delay(now()->addMinutes(5));
+```
+
+#### `event()`
+
+Dispatch an event and call its listeners.
+
+```php
+// Dispatch event
+event(new UserRegistered($user));
+
+// Dispatch with multiple parameters
+event('user.login', [$user, $request]);
+
+// Dispatch until first non-null response
+$response = event('user.login', [$user], true);
+```
+
+### Queues and Jobs
+
+#### `dispatch()`
+
+Dispatch a job to its appropriate handler.
+
+```php
+// Dispatch job
+dispatch(new ProcessPayment($order));
+
+// Dispatch with delay
+dispatch(new ProcessPayment($order))->delay(now()->addMinutes(10));
+
+// Dispatch to specific queue
+dispatch(new ProcessPayment($order))->onQueue('payments');
+
+// Dispatch to specific connection
+dispatch(new ProcessPayment($order))->onConnection('redis');
+```
+
+#### `dispatch_sync()`
+
+Dispatch a command to its appropriate handler in the current process.
+
+```php
+// Dispatch synchronously
+dispatch_sync(new ProcessPayment($order));
+
+// Useful for testing or immediate execution
+dispatch_sync(new SendWelcomeEmail($user));
+```
+
+### Security
+
+#### `bcrypt()`
+
+Hash the given value using the bcrypt algorithm.
+
+```php
+// Hash password
+$hash = bcrypt('password');
+
+// Hash with custom rounds
+$hash = bcrypt('password', ['rounds' => 12]);
+
+// Verify password
+if (password_verify('password', $hash)) {
+    // Password is correct
+}
+```
+
+#### `decrypt()`
+
+Decrypt the given value.
+
+```php
+// Decrypt value
+$decrypted = decrypt($encryptedValue);
+
+// Decrypt with specific cipher
+$decrypted = decrypt($encryptedValue, false);
+```
+
+#### `encrypt()`
+
+Encrypt the given value.
+
+```php
+// Encrypt value
+$encrypted = encrypt('secret data');
+
+// Encrypt for serialization
+$encrypted = encrypt($object, true);
+```
+
+#### `e()`
+
+Encode HTML characters in a string to prevent XSS attacks.
+
+```php
+// Escape HTML
+echo e('<script>alert("XSS")</script>');
+// Output: &lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;
+
+// Escape user input
+echo e($userInput);
+
+// In Blade templates (automatic escaping)
+{{ $userInput }} // Automatically escaped
+{!! $trustedInput !!} // Not escaped
+```
+
+### Data Manipulation
+
+#### `blank()`
+
+Determine if the given value is "blank".
+
+```php
+// Check if blank
+blank(''); // true
+blank(null); // true
+blank([]); // true
+blank(collect()); // true
+blank('   '); // true
+blank('hello'); // false
+```
+
+#### `filled()`
+
+Determine if the given value is not "blank".
+
+```php
+// Check if filled
+filled('hello'); // true
+filled([1, 2, 3]); // true
+filled(''); // false
+filled(null); // false
+filled([]); // false
+```
+
+#### `collect()`
+
+Create a collection from the given value.
+
+```php
+// Create collection from array
+$collection = collect([1, 2, 3]);
+
+// Create empty collection
+$empty = collect();
+
+// Collection methods
+$collection->filter(function ($item) {
+    return $item > 1;
+})->map(function ($item) {
+    return $item * 2;
+});
+```
+
+#### `data_fill()`
+
+Fill in missing values in an array or object using dot notation.
+
+```php
+$data = ['products' => ['desk' => ['price' => 100]]];
+
+// Fill missing values
+data_fill($data, 'products.desk.name', 'Desk');
+data_fill($data, 'products.chair.price', 200);
+
+// Result: ['products' => ['desk' => ['price' => 100, 'name' => 'Desk'], 'chair' => ['price' => 200]]]
+```
+
+#### `data_forget()`
+
+Remove an item from an array or object using dot notation.
+
+```php
+$data = [
+    'products' => [
+        'desk' => ['price' => 100, 'name' => 'Desk'],
+        'chair' => ['price' => 200]
+    ]
+];
+
+// Remove item
+data_forget($data, 'products.desk.name');
+data_forget($data, 'products.chair');
+```
+
+#### `data_get()`
+
+Retrieve an item from an array or object using dot notation.
+
+```php
+$data = [
+    'products' => [
+        'desk' => ['price' => 100, 'name' => 'Desk']
+    ]
+];
+
+// Get item
+$price = data_get($data, 'products.desk.price'); // 100
+$name = data_get($data, 'products.desk.name'); // 'Desk'
+
+// Get with default
+$color = data_get($data, 'products.desk.color', 'brown'); // 'brown'
+
+// Use wildcard
+$prices = data_get($data, 'products.*.price'); // [100]
+```
+
+#### `data_set()`
+
+Set an item on an array or object using dot notation.
+
+```php
+$data = ['products' => ['desk' => ['price' => 100]]];
+
+// Set item
+data_set($data, 'products.desk.name', 'Desk');
+data_set($data, 'products.chair.price', 200);
+
+// Set with wildcard
+data_set($data, 'products.*.discount', 10);
+```
+
+#### `head()`
+
+Return the first element in an array.
+
+```php
+// Get first element
+$first = head([1, 2, 3]); // 1
+$first = head(['a' => 1, 'b' => 2]); // 1
+
+// Empty array
+$first = head([]); // null
+```
+
+#### `last()`
+
+Return the last element in an array.
+
+```php
+// Get last element
+$last = last([1, 2, 3]); // 3
+$last = last(['a' => 1, 'b' => 2]); // 2
+
+// Empty array
+$last = last([]); // null
+```
+
+### String and Object Manipulation
+
+#### `class_basename()`
+
+Get the class "basename" of the given object / class.
+
+```php
+// Get class basename
+$basename = class_basename('App\Http\Controllers\UserController'); // 'UserController'
+$basename = class_basename(new User); // 'User'
+$basename = class_basename(User::class); // 'User'
+```
+
+#### `class_uses_recursive()`
+
+Return all of the trait names used by a class, its parent classes, and trait dependencies.
+
+```php
+// Get all traits used by class
+$traits = class_uses_recursive(User::class);
+
+// Example output: ['Illuminate\Database\Eloquent\Concerns\HasTimestamps', ...]
+```
+
+#### `trait_uses_recursive()`
+
+Return all of the trait names used by a trait and its dependencies.
+
+```php
+// Get traits used by a trait
+$traits = trait_uses_recursive(SomeTraitName::class);
+```
+
+#### `fluent()`
+
+Create a fluent object from the given value.
+
+```php
+// Create fluent object
+$fluent = fluent(['name' => 'John', 'age' => 30]);
+
+// Access properties
+echo $fluent->name; // 'John'
+echo $fluent->get('age'); // 30
+
+// Set properties
+$fluent->email = 'john@example.com';
+$fluent->set('phone', '123-456-7890');
+```
+
+#### `literal()`
+
+Return a new object with the given named arguments.
+
+```php
+// Create object with named arguments
+$object = literal(name: 'John', age: 30, city: 'New York');
+
+// Access properties
+echo $object->name; // 'John'
+echo $object->age; // 30
+```
+
+#### `object_get()`
+
+Retrieve an item from an object using dot notation.
+
+```php
+$object = (object) [
+    'user' => (object) [
+        'name' => 'John',
+        'email' => 'john@example.com'
+    ]
+];
+
+// Get property
+$name = object_get($object, 'user.name'); // 'John'
+$email = object_get($object, 'user.email'); // 'john@example.com'
+
+// Get with default
+$phone = object_get($object, 'user.phone', 'N/A'); // 'N/A'
+```
+
+#### `str()`
+
+Get a new stringable object from the given string.
+
+```php
+// Create stringable object
+$str = str('Hello World');
+
+// String manipulation
+$result = str('hello world')
+    ->title()
+    ->replace('World', 'Laravel')
+    ->slug();
+
+// Method chaining
+$slug = str('Hello World')->slug(); // 'hello-world'
+$title = str('hello world')->title(); // 'Hello World'
+```
+
+### Control Flow
 
 #### `once()`
 
-Garante que um callable seja chamado apenas uma vez, retornando o resultado em chamadas subsequentes.
+Ensure that a callable is executed only once.
 
 ```php
-// Operação custosa executada apenas uma vez
-$result = once(function () {
-    return expensive_database_query();
+$expensive = once(function () {
+    // This expensive operation will only run once
+    return expensiveOperation();
 });
 
-// Chamadas subsequentes retornam o mesmo resultado
-$sameResult = once(function () {
-    return expensive_database_query();
+// First call executes the function
+$result1 = $expensive(); // Executes expensiveOperation()
+
+// Subsequent calls return cached result
+$result2 = $expensive(); // Returns cached result
+```
+
+#### `optional()`
+
+Return the value if it exists or a default value.
+
+```php
+// Safe property access
+$name = optional($user)->name;
+
+// Safe method calls
+$email = optional($user)->getEmail();
+
+// Chained calls
+$phone = optional($user)->profile->phone;
+
+// With callback
+$result = optional($user, function ($user) {
+    return $user->name . ' - ' . $user->email;
 });
+```
+
+#### `rescue()`
+
+Execute the given callback and catch any exceptions that occur during execution.
+
+```php
+// Rescue with default value
+$result = rescue(function () {
+    return riskyOperation();
+}, 'default value');
+
+// Rescue with callback for exception handling
+$result = rescue(function () {
+    return riskyOperation();
+}, function ($exception) {
+    report($exception);
+    return 'fallback value';
+});
+
+// Simple rescue
+$result = rescue(fn() => $user->profile->phone, 'N/A');
 ```
 
 #### `retry()`
 
-Tenta executar uma operação um determinado número de vezes antes de falhar.
+Attempt to execute the given callback until the given maximum attempt threshold is met.
 
 ```php
-// Tentar 3 vezes
+// Retry up to 3 times
 $result = retry(3, function () {
-    return api_call_that_might_fail();
+    // Potentially failing operation
+    return callExternalAPI();
 });
 
-// Com delay entre tentativas (em milissegundos)
+// Retry with delay (milliseconds)
 $result = retry(3, function () {
-    return api_call();
+    return callExternalAPI();
 }, 1000);
 
-// Com callback para decidir se deve tentar novamente
+// Retry with custom delay function
 $result = retry(3, function () {
-    return api_call();
-}, 0, function ($exception) {
+    return callExternalAPI();
+}, function ($attempt) {
+    return $attempt * 1000; // Exponential backoff
+});
+
+// Retry with when condition
+$result = retry(3, function () {
+    return callExternalAPI();
+}, 1000, function ($exception) {
     return $exception instanceof ConnectionException;
 });
 ```
 
 #### `tap()`
 
-Chama o Closure fornecido com o valor e retorna o valor original.
+Call the given closure with the given value then return the value.
 
 ```php
-// Executar ação sem alterar o valor
-$user = tap(new User(['name' => 'João']), function ($user) {
-    $user->save();
-    $user->assignRole('user');
+// Tap into value
+$user = tap(new User, function ($user) {
+    $user->name = 'John';
+    $user->email = 'john@example.com';
 });
 
-// Com objetos existentes
+// Tap with method calls
 $collection = tap(collect([1, 2, 3]), function ($collection) {
     $collection->push(4);
-    log('Collection modified');
+});
+
+// Tap for debugging
+$result = tap($someValue, function ($value) {
+    logger('Processing value: ' . $value);
+});
+```
+
+#### `throw_if()`
+
+Throw the given exception if a given condition evaluates to true.
+
+```php
+// Throw if condition is true
+throw_if($user->isNotAuthorized(), new UnauthorizedException);
+
+// Throw with message
+throw_if($errors->any(), ValidationException::class, 'Validation failed');
+
+// Throw with callback
+throw_if($user->isBlocked(), function () {
+    return new BlockedException('User is blocked');
+});
+```
+
+#### `throw_unless()`
+
+Throw the given exception unless a given condition evaluates to true.
+
+```php
+// Throw unless condition is true
+throw_unless($user->isAuthorized(), new UnauthorizedException);
+
+// Throw unless authenticated
+throw_unless(auth()->check(), new AuthenticationException);
+
+// Throw with callback
+throw_unless($user->canAccess($resource), function () {
+    return new AccessDeniedException('Cannot access resource');
 });
 ```
 
 #### `transform()`
 
-Transforma o valor fornecido se estiver presente (não nulo), caso contrário retorna o valor original.
+Transform the given value if it is present.
 
 ```php
-// Transformar se não for null
-$result = transform($value, function ($v) {
-    return strtoupper($v);
+// Transform if not null
+$result = transform($value, function ($value) {
+    return strtoupper($value);
 });
 
-// Com valor padrão
-$result = transform($value, function ($v) {
-    return strtoupper($v);
-}, 'DEFAULT');
+// Transform with default
+$result = transform($value, function ($value) {
+    return strtoupper($value);
+}, 'default');
 
-// Exemplo prático
-$name = transform($user->name ?? null, function ($name) {
-    return ucwords($name);
-}, 'Usuário Anônimo');
+// Transform null returns null (unless default provided)
+$result = transform(null, function ($value) {
+    return strtoupper($value);
+}); // null
 ```
 
 #### `value()`
 
-Retorna o valor padrão do valor fornecido, resolvendo Closures automaticamente.
+Return the default value of the given value.
 
 ```php
-// Valor simples
+// Return value as-is
 $result = value('hello'); // 'hello'
 
-// Resolver Closure
+// Execute closure
 $result = value(function () {
-    return 'computed value';
-}); // 'computed value'
+    return 'dynamic value';
+}); // 'dynamic value'
 
-// Com parâmetros
-$result = value(function ($prefix) {
-    return $prefix . ' world';
-}, 'hello'); // 'hello world'
+// With parameters
+$result = value(function ($name) {
+    return "Hello, {$name}";
+}, 'John'); // 'Hello, John'
 ```
 
 #### `when()`
 
-Retorna um valor se a condição fornecida for verdadeira, caso contrário retorna um valor alternativo.
+Return the value if the given condition is true.
 
 ```php
-// Condição simples
-$message = when($user, 'Usuário logado', 'Visitante');
+// Return value if condition is true
+$result = when(true, 'value'); // 'value'
+$result = when(false, 'value'); // null
 
-// Com Closures
-$result = when($condition, function () {
-    return expensive_operation();
-}, function () {
-    return default_value();
+// With callback
+$result = when($user->isAdmin(), function () {
+    return 'admin privileges';
 });
 
-// Valor único
-$class = when($isActive, 'active');
+// With default value
+$result = when(false, 'admin', 'guest'); // 'guest'
 ```
 
 #### `with()`
 
-Retorna o valor fornecido, opcionalmente passado através de um callback.
+Return the given value, optionally passed through the given callback.
 
 ```php
-// Sem callback
-$user = with(new User());
+// Return value as-is
+$result = with('hello'); // 'hello'
 
-// Com callback
-$name = with($user, function ($user) {
-    return $user->name;
-});
+// Transform value
+$result = with('hello', function ($value) {
+    return strtoupper($value);
+}); // 'HELLO'
 
-// Encadeamento
-$result = with(collect([1, 2, 3]), function ($collection) {
-    return $collection->map(function ($item) {
-        return $item * 2;
-    });
-});
+// Useful for method chaining
+$user = with(new User)->fill($attributes)->save();
 ```
 
-### Data e Tempo
+### Context and Defer
 
-#### `now()`
+#### `context()`
 
-Cria uma nova instância Carbon para o tempo atual com possibilidade de especificar timezone.
-
-```php
-// Data/hora atual
-$now = now();
-
-// Com timezone específico
-$saoPaulo = now('America/Sao_Paulo');
-$utc = now('UTC');
-
-// Formatação
-echo now()->format('Y-m-d H:i:s');
-
-// Operações
-$futuro = now()->addDays(7);
-$passado = now()->subHours(2);
-```
-
-#### `today()`
-
-Cria uma nova instância Carbon para a data atual (meia-noite).
+Get or store context values for the current request.
 
 ```php
-// Data atual (00:00:00)
-$today = today();
+// Store context
+context(['user_id' => auth()->id()]);
 
-// Com timezone
-$todaySP = today('America/Sao_Paulo');
+// Get context
+$userId = context('user_id');
 
-// Comparações
-if ($date->isToday()) {
-    echo 'É hoje!';
-}
+// Get all context
+$allContext = context();
 
-// Operações
-$tomorrow = today()->addDay();
-$yesterday = today()->subDay();
-```
-
-### HTTP e Respostas
-
-#### `abort()`
-
-Lança uma HttpException com os dados fornecidos, interrompendo a execução.
-
-```php
-// Erro 404 simples
-abort(404);
-
-// Com mensagem personalizada
-abort(404, 'Página não encontrada');
-
-// Com headers personalizados
-abort(403, 'Acesso negado', [
-    'X-Custom-Header' => 'valor'
-]);
-```
-
-#### `abort_if()`
-
-Lança uma HttpException se a condição fornecida for verdadeira.
-
-```php
-// Verificar permissão
-abort_if(!$user, 403, 'Acesso negado');
-
-// Verificar propriedade
-abort_if($post->user_id !== auth()->id(), 403);
-
-// Com múltiplas condições
-abort_if(!$user || !$user->isActive(), 401, 'Usuário inativo');
-```
-
-#### `abort_unless()`
-
-Lança uma HttpException a menos que a condição seja verdadeira.
-
-```php
-// Verificar autenticação
-abort_unless(auth()->check(), 401);
-
-// Verificar permissão de admin
-abort_unless($user->isAdmin(), 403, 'Apenas administradores');
-
-// Verificar status
-abort_unless($post->isPublished(), 404);
-```
-
-#### `back()`
-
-Cria uma nova resposta de redirecionamento para a localização anterior do usuário.
-
-```php
-// Redirecionamento simples
-return back();
-
-// Com dados de sessão
-return back()->with('success', 'Operação realizada com sucesso!');
-
-// Com erros
-return back()->withErrors(['email' => 'Email inválido']);
-
-// Com input antigo
-return back()->withInput();
-```
-
-#### `redirect()`
-
-Obtém uma instância do redirecionador para criar redirecionamentos.
-
-```php
-// Redirecionamento simples
-return redirect('/home');
-
-// Para rota nomeada
-return redirect()->route('dashboard');
-
-// Com parâmetros
-return redirect()->route('user.profile', ['id' => 1]);
-
-// Com dados de sessão
-return redirect('/home')->with('message', 'Bem-vindo!');
-```
-
-#### `response()`
-
-Retorna uma nova resposta da aplicação com conteúdo e headers customizados.
-
-```php
-// Resposta JSON
-return response()->json(['status' => 'success']);
-
-// Com status code
-return response('Conteúdo', 200);
-
-// Com headers
-return response()->json($data)->header('X-Custom', 'value');
-
-// Download de arquivo
-return response()->download($pathToFile);
-```
-
-#### `to_route()`
-
-Cria uma nova resposta de redirecionamento para uma rota nomeada.
-
-```php
-// Redirecionamento para rota
-return to_route('dashboard');
-
-// Com parâmetros
-return to_route('user.show', ['user' => 1]);
-
-// Com query string
-return to_route('posts.index', ['page' => 2]);
-```
-
-### Jobs e Eventos
-
-#### `broadcast()`
-
-Inicia a transmissão de um evento para canais de broadcasting.
-
-```php
-// Broadcast simples
-broadcast(new OrderShipped($order));
-
-// Para canais específicos
-broadcast(new OrderShipped($order))->toOthers();
-
-// Para canal privado
-broadcast(new OrderShipped($order))->to('private-orders');
+// Context is automatically included in logs
+logger('User action performed'); // Will include user_id in log context
 ```
 
 #### `defer()`
 
-Adia a execução do callback fornecido até o final do ciclo de vida da requisição.
+Defer the execution of a callback until the request is terminating.
 
 ```php
-// Operação diferida
+// Defer execution
 defer(function () {
-    Log::info('Requisição processada');
+    // This will run after the response is sent
+    cleanupTempFiles();
 });
 
-// Limpeza de recursos
-defer(function () use ($tempFile) {
-    unlink($tempFile);
-});
-
-// Com múltiplas operações
+// Defer with name (can be cancelled)
 defer(function () {
-    cleanup_cache();
-    send_analytics();
-});
+    sendAnalytics();
+}, 'analytics');
+
+// Always defer (even if previous defer with same name exists)
+defer(function () {
+    logMetrics();
+}, 'metrics', always: true);
 ```
 
-#### `dispatch()`
+### Testing
 
-Despacha um job para seu manipulador apropriado (fila ou execução imediata).
+#### `fake()`
+
+Get a faker instance for generating fake data in tests.
 
 ```php
-// Despachar job simples
-dispatch(new ProcessOrder($order));
+// Generate fake data
+$name = fake()->name();
+$email = fake()->email();
+$address = fake()->address();
+$text = fake()->text(200);
 
-// Com delay
-dispatch(new SendEmail($user))->delay(now()->addMinutes(5));
+// Locale-specific fake data
+$name = fake('pt_BR')->name(); // Brazilian Portuguese name
+$phone = fake('pt_BR')->phoneNumber();
 
-// Para fila específica
-dispatch(new ProcessPayment($payment))->onQueue('payments');
+// Seed for consistent fake data
+fake()->seed(1234);
+$name1 = fake()->name(); // Always same with same seed
 ```
 
-#### `dispatch_sync()`
+### Utilities
 
-Despacha um comando para seu manipulador no processo atual (execução síncrona).
+#### `laravel_cloud()`
 
-```php
-// Execução imediata
-dispatch_sync(new ProcessOrder($order));
-
-// Para operações que devem ser executadas imediatamente
-dispatch_sync(new ValidateData($data));
-```
-
-#### `event()`
-
-Despacha um evento e chama todos os listeners registrados.
+Determine if the application is running on Laravel Cloud.
 
 ```php
-// Evento simples
-event(new UserRegistered($user));
-
-// Com múltiplos parâmetros
-event(new OrderProcessed($order, $payment));
-
-// Evento inline
-event('user.login', [$user]);
-```
-
-### Logs e Contexto
-
-#### `context()`
-
-Obtém ou define valores de contexto especificados para logs estruturados.
-
-```php
-// Definir contexto
-context('user_id', auth()->id());
-context('request_id', Str::uuid());
-
-// Obter contexto
-$userId = context('user_id');
-
-// Múltiplos valores
-context([
-    'user_id' => auth()->id(),
-    'ip' => request()->ip()
-]);
-```
-
-#### `info()`
-
-Escreve informações no log com nível "info".
-
-```php
-// Log simples
-info('Usuário fez login');
-
-// Com contexto
-info('Operação concluída', [
-    'user_id' => 1,
-    'duration' => 150
-]);
-
-// Com dados estruturados
-info('API call made', [
-    'endpoint' => '/api/users',
-    'response_time' => 250
-]);
-```
-
-#### `logger()`
-
-Registra uma mensagem de debug nos logs ou retorna a instância do logger.
-
-```php
-// Mensagem de debug
-logger('Debug information', ['data' => $debugData]);
-
-// Obter instância do logger
-$log = logger();
-$log->error('Erro crítico');
-
-// Diferentes níveis
-logger()->info('Informação');
-logger()->warning('Aviso');
-logger()->error('Erro');
-```
-
-#### `logs()`
-
-Obtém uma instância do driver de log especificado.
-
-```php
-// Driver padrão
-$log = logs();
-
-// Driver específico
-$slackLog = logs('slack');
-$fileLog = logs('single');
-
-// Usar driver específico
-logs('slack')->critical('Sistema com problemas');
-```
-
-### Manipulação de Arrays e Collections
-
-#### `collect()`
-
-Cria uma collection a partir do valor fornecido para manipulação fluente de dados.
-
-```php
-// Array simples
-$collection = collect([1, 2, 3, 4]);
-
-// Com objetos
-$users = collect(User::all());
-
-// Manipulação fluente
-$result = collect([1, 2, 3])
-    ->map(fn($i) => $i * 2)
-    ->filter(fn($i) => $i > 4)
-    ->values();
-```
-
-#### `data_fill()`
-
-Preenche dados onde estão faltando usando notação de ponto.
-
-```php
-$data = ['user' => ['name' => 'João']];
-
-// Preencher campo faltante
-data_fill($data, 'user.email', 'joao@email.com');
-
-// Múltiplos campos
-data_fill($data, [
-    'user.age' => 30,
-    'user.city' => 'São Paulo'
-]);
-
-// Resultado: ['user' => ['name' => 'João', 'email' => 'joao@email.com']]
-```
-
-#### `data_forget()`
-
-Remove/desdefine um item de array ou objeto usando notação de ponto.
-
-```php
-$data = [
-    'user' => [
-        'name' => 'João',
-        'email' => 'joao@email.com',
-        'password' => 'secret'
-    ]
-];
-
-// Remover campo específico
-data_forget($data, 'user.password');
-
-// Remover múltiplos campos
-data_forget($data, ['user.email', 'user.password']);
-```
-
-#### `data_get()`
-
-Obtém um item de array ou objeto usando notação de ponto com valor padrão opcional.
-
-```php
-$data = [
-    'user' => [
-        'profile' => [
-            'name' => 'João Silva'
-        ]
-    ]
-];
-
-// Obter valor aninhado
-$name = data_get($data, 'user.profile.name'); // 'João Silva'
-
-// Com valor padrão
-$age = data_get($data, 'user.profile.age', 25); // 25
-
-// Array de arrays
-$names = data_get($users, '*.name');
-```
-
-#### `data_set()`
-
-Define um item em array ou objeto usando notação de ponto.
-
-```php
-$data = [];
-
-// Definir valor aninhado
-data_set($data, 'user.profile.name', 'João Silva');
-
-// Resultado: ['user' => ['profile' => ['name' => 'João Silva']]]
-
-// Sobrescrever valor existente
-data_set($data, 'user.profile.age', 30);
-
-// Com arrays
-data_set($data, 'user.hobbies.0', 'Programação');
-```
-
-#### `head()`
-
-Obtém o primeiro elemento de um array, útil para encadeamento de métodos.
-
-```php
-// Array simples
-$first = head([1, 2, 3]); // 1
-
-// Com collection
-$firstUser = head(User::all());
-
-// Encadeamento
-$result = head(
-    collect($data)->where('status', 'active')->toArray()
-);
-```
-
-#### `last()`
-
-Obtém o último elemento de um array.
-
-```php
-// Array simples
-$last = last([1, 2, 3]); // 3
-
-// Com strings
-$lastChar = last(str_split('hello')); // 'o'
-
-// Array associativo
-$lastValue = last(['a' => 1, 'b' => 2, 'c' => 3]); // 3
-```
-
-### Manipulação de Classes
-
-#### `class_basename()`
-
-Obtém o nome base da classe de um objeto ou string de classe.
-
-```php
-// De string
-$basename = class_basename('App\Models\User'); // 'User'
-
-// De objeto
-$user = new User();
-$basename = class_basename($user); // 'User'
-
-// Namespace complexo
-$basename = class_basename('App\Http\Controllers\UserController'); // 'UserController'
-```
-
-#### `class_uses_recursive()`
-
-Retorna todos os traits usados por uma classe, suas classes pai e traits dos traits.
-
-```php
-// Obter todos os traits
-$traits = class_uses_recursive(User::class);
-
-// Verificar se usa trait específico
-if (in_array('Notifiable', class_uses_recursive(User::class))) {
-    // Classe usa o trait Notifiable
+// Check if running on Laravel Cloud
+if (laravel_cloud()) {
+    // Running on Laravel Cloud
+    $cloudConfig = getCloudSpecificConfig();
 }
 
-// Com instância
-$traits = class_uses_recursive($user);
+// Conditional logic for cloud environment
+$cacheDriver = laravel_cloud() ? 'redis' : 'file';
 ```
-
-#### `trait_uses_recursive()`
-
-Retorna todos os traits usados por um trait e seus traits dependentes.
-
-```php
-// Traits de um trait
-$traits = trait_uses_recursive('App\Traits\Cacheable');
-
-// Verificar dependências
-$dependencies = trait_uses_recursive('Illuminate\Notifications\Notifiable');
-```
-
-### Manipulação de Dados
-
-#### `cookie()`
-
-Cria uma nova instância de cookie com configurações personalizadas.
-
-```php
-// Cookie simples
-$cookie = cookie('name', 'value', 60); // 60 minutos
-
-// Com configurações avançadas
-$cookie = cookie('preferences', json_encode($prefs), 60 * 24 * 30, '/', null, true, true);
-
-// Cookie de sessão
-$sessionCookie = cookie('session_data', $data);
-
-// Em resposta
-return response('OK')->cookie($cookie);
-```
-
-#### `fluent()`
-
-Cria um objeto Fluent a partir de um array ou objeto para acesso fluente aos dados.
-
-```php
-// De array
-$fluent = fluent(['name' => 'João', 'age' => 30]);
-echo $fluent->name; // 'João'
-
-// Modificação fluente
-$fluent->email = 'joao@email.com';
-
-// Métodos encadeados
-$data = fluent($array)->toArray();
-```
-
-#### `literal()`
-
-Retorna um objeto literal/anônimo usando argumentos nomeados.
-
-```php
-// Objeto literal
-$obj = literal(nome: 'João', idade: 30, ativo: true);
-
-// Acesso a propriedades
-echo $obj->nome; // 'João'
-echo $obj->idade; // 30
-
-// Uso em retornos
-return literal(
-    status: 'success',
-    data: $processedData,
-    timestamp: now()
-);
-```
-
-#### `object_get()`
-
-Obtém um item de um objeto usando notação de ponto.
-
-```php
-$obj = (object) [
-    'user' => (object) [
-        'profile' => (object) [
-            'name' => 'João'
-        ]
-    ]
-];
-
-// Acesso aninhado
-$name = object_get($obj, 'user.profile.name'); // 'João'
-
-// Com valor padrão
-$age = object_get($obj, 'user.profile.age', 25); // 25
-```
-
-#### `optional()`
-
-Fornece acesso seguro a objetos opcionais, evitando erros de null.
-
-```php
-// Acesso seguro
-$name = optional($user)->name;
-
-// Método aninhado
-$email = optional($user->profile)->email;
-
-// Com callback
-$result = optional($user, function ($user) {
-    return $user->profile->getDisplayName();
-});
-
-// Evita erros
-$city = optional($user->address)->city; // null se address for null
-```
-
-### Requisições e Views
 
 #### `precognitive()`
 
-Manipula um hook de controller Precognition para validação antecipada.
+Handle Precognition controller hook.
 
 ```php
-// Hook básico
-return precognitive(function ($when) {
-    $when(request()->missing('user_id'), function () {
-        return response()->json(['errors' => ['user_id' => 'Required']]);
-    });
-});
-
-// Validação condicional
-return precognitive(function ($when) {
-    $when(request()->filled('email'), function () {
-        // Validar email apenas se fornecido
-        validator(request()->all(), ['email' => 'email'])->validate();
-    });
-});
-```
-
-#### `request()`
-
-Obtém uma instância da requisição atual ou um item de entrada específico.
-
-```php
-// Instância completa
-$request = request();
-
-// Item específico
-$email = request('email');
-
-// Com valor padrão
-$page = request('page', 1);
-
-// Múltiplos itens
-$data = request(['name', 'email', 'phone']);
-
-// Verificações
-if (request()->has('search')) {
-    $search = request('search');
-}
-```
-
-#### `validator()`
-
-Cria uma nova instância Validator para validação de dados.
-
-```php
-// Validação básica
-$validator = validator($data, [
-    'name' => 'required|string|max:255',
-    'email' => 'required|email|unique:users'
-]);
-
-// Verificar se passou
-if ($validator->passes()) {
-    // Validação passou
-}
-
-// Obter erros
-$errors = $validator->errors();
-
-// Mensagens personalizadas
-$validator = validator($data, $rules, [
-    'name.required' => 'O nome é obrigatório'
-]);
-```
-
-#### `view()`
-
-Obtém o conteúdo da view avaliada com dados opcionais.
-
-```php
-// View simples
-return view('welcome');
-
-// Com dados
-return view('user.profile', ['user' => $user]);
-
-// Dados múltiplos
-return view('dashboard', compact('users', 'posts', 'stats'));
-
-// View aninhada
-return view('admin.users.index', $data);
-
-// Verificar se existe
-if (view()->exists('custom.template')) {
-    return view('custom.template');
-}
-```
-
-### Segurança e Criptografia
-
-#### `bcrypt()`
-
-Faz hash do valor fornecido usando o algoritmo bcrypt para senhas seguras.
-
-```php
-// Hash de senha
-$hashedPassword = bcrypt('minha-senha-segura');
-
-// Verificação posterior com Hash::check()
-if (Hash::check('minha-senha-segura', $hashedPassword)) {
-    // Senha correta
-}
-
-// Em modelos
-public function setPasswordAttribute($value)
+// In controller method
+public function store(Request $request)
 {
-    $this->attributes['password'] = bcrypt($value);
+    // Handle precognitive validation
+    precognitive(function () use ($request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users'
+        ]);
+    });
+
+    // Continue with normal processing
+    $user = User::create($request->validated());
+
+    return response()->json($user);
 }
 ```
-
-#### `csrf_field()`
-
-Gera um campo de formulário HTML hidden com token CSRF para proteção.
-
-```php
-// Em blade templates
-{!! csrf_field() !!}
-
-// Resultado HTML
-// <input type="hidden" name="_token" value="abc123...">
-
-// Em formulários manuais
-echo '<form method="POST">';
-echo csrf_field();
-echo '<input type="text" name="data">';
-echo '</form>';
-```
-
-#### `csrf_token()`
-
-Obtém o valor do token CSRF atual da sessão.
-
-```php
-// Obter token
-$token = csrf_token();
-
-// Em JavaScript/AJAX
-$token = csrf_token();
-echo "<script>window.csrfToken = '{$token}';</script>";
-
-// Em meta tags
-echo '<meta name="csrf-token" content="' . csrf_token() . '">';
-```
-
-#### `decrypt()`
-
-Descriptografa o valor fornecido usando a chave da aplicação.
-
-```php
-// Descriptografar dados
-$decrypted = decrypt($encryptedValue);
-
-// Com tratamento de erro
-try {
-    $data = decrypt($encryptedData);
-} catch (DecryptException $e) {
-    // Falha na descriptografia
-}
-
-// Dados complexos
-$array = decrypt($encryptedArray);
-$object = decrypt($encryptedObject);
-```
-
-#### `e()`
-
-Codifica caracteres especiais HTML em uma string para prevenir ataques XSS.
-
-```php
-// Escapar conteúdo perigoso
-$safe = e('<script>alert("xss")</script>');
-// Resultado: &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
-
-// Em templates
-echo e($userInput);
-
-// Dados do usuário
-$comment = e($request->input('comment'));
-echo "Comentário: {$comment}";
-```
-
-#### `encrypt()`
-
-Criptografa o valor fornecido usando a chave da aplicação.
-
-```php
-// Criptografar dados sensíveis
-$encrypted = encrypt('dados-confidenciais');
-
-// Arrays e objetos
-$encryptedArray = encrypt(['credit_card' => '1234-5678-9012-3456']);
-
-// Para armazenamento
-$user->encrypted_data = encrypt($sensitiveData);
-$user->save();
-```
-
-#### `method_field()`
-
-Gera um campo de formulário para falsificar o verbo HTTP (PUT, PATCH, DELETE).
-
-```php
-// Para métodos não suportados por HTML
-echo method_field('PUT');
-// <input type="hidden" name="_method" value="PUT">
-
-// Em formulários
-echo '<form method="POST">';
-echo method_field('DELETE');
-echo csrf_field();
-echo '</form>';
-
-// Em Blade
-@method('PATCH')
-```
-
-### Sessão e Cache
-
-#### `cache()`
-
-Obtém ou define valores do cache especificado com TTL opcional.
-
-```php
-// Obter do cache
-$value = cache('key');
-
-// Com valor padrão
-$value = cache('key', 'default');
-
-// Definir no cache
-cache(['key' => 'value'], 60); // 60 minutos
-
-// Cache permanente
-cache()->forever('key', 'value');
-
-// Cache com callback
-$users = cache('users', function () {
-    return User::all();
-});
-```
-
-#### `old()`
-
-Recupera um item de entrada antigo da sessão (geralmente após redirecionamento com erro).
-
-```php
-// Input anterior
-$email = old('email');
-
-// Com valor padrão
-$name = old('name', 'Valor padrão');
-
-// Em formulários
-echo '<input type="email" value="' . old('email') . '">';
-
-// Arrays
-$hobbies = old('hobbies', []);
-```
-
-#### `session()`
-
-Obtém ou define valores de sessão especificados.
-
-```php
-// Obter da sessão
-$userId = session('user_id');
-
-// Com valor padrão
-$theme = session('theme', 'light');
-
-// Definir na sessão
-session(['user_id' => 123]);
-
-// Flash data (apenas próxima requisição)
-session()->flash('message', 'Sucesso!');
-
-// Múltiplos valores
-session([
-    'user_id' => 123,
-    'role' => 'admin'
-]);
-```
-
-### Strings e Regex
 
 #### `preg_replace_array()`
 
-Substitui um padrão com cada valor do array sequencialmente.
+Replace a given pattern with each value in the array in a sequential order.
 
 ```php
-// Substituição sequencial
-$result = preg_replace_array('/\?/', ['João', 'Silva'], 'Nome: ? Sobrenome: ?');
-// Resultado: 'Nome: João Sobrenome: Silva'
+$string = 'The :attribute must be :type.';
+$replacements = ['name', 'string'];
 
-// Com múltiplas substituições
-$template = 'SELECT * FROM ? WHERE ? = ?';
-$query = preg_replace_array('/\?/', ['users', 'id', '1'], $template);
-// Resultado: 'SELECT * FROM users WHERE id = 1'
+$result = preg_replace_array('/:attribute|:type/', $replacements, $string);
+// Result: 'The name must be string.'
 
-// Dados dinâmicos
-$values = ['produto', 'ativo', '1'];
-$sql = preg_replace_array('/\?/', $values, 'SELECT * FROM ? WHERE ? = ?');
+// With more complex patterns
+$string = 'Hello :name, you have :count messages.';
+$replacements = ['John', '5'];
+$result = preg_replace_array('/:name|:count/', $replacements, $string);
+// Result: 'Hello John, you have 5 messages.'
 ```
 
-#### `str()`
+#### `windows_os()`
 
-Obtém um novo objeto stringable da string fornecida para manipulação fluente.
+Determine if the current OS is Windows.
 
 ```php
-// Manipulação fluente
-$result = str('hello world')
-    ->upper()
-    ->replace('WORLD', 'LARAVEL')
-    ->toString(); // 'HELLO LARAVEL'
-
-// Métodos encadeados
-$slug = str('Meu Título de Post')
-    ->slug()
-    ->toString(); // 'meu-titulo-de-post'
-
-// Verificações
-if (str($email)->contains('@')) {
-    // É um email válido
+// Check if running on Windows
+if (windows_os()) {
+    // Windows-specific logic
+    $path = str_replace('/', '\\', $path);
 }
 
-// Conversões
-$camel = str('hello_world')->camel(); // 'helloWorld'
-$snake = str('HelloWorld')->snake(); // 'hello_world'
+// Conditional file operations
+$separator = windows_os() ? '\\' : '/';
+$fullPath = $directory . $separator . $filename;
 ```
 
-### Tradução
+### Views
 
-#### `__()`
+#### `view()`
 
-Traduz a mensagem fornecida (alias para trans) usando os arquivos de idioma.
-
-```php
-// Tradução simples
-echo __('messages.welcome'); // 'Bem-vindo'
-
-// Com parâmetros
-echo __('messages.hello', ['name' => 'João']); // 'Olá, João'
-
-// Idioma específico
-echo __('messages.goodbye', [], 'en'); // 'Goodbye'
-
-// Com valor padrão
-echo __('messages.unknown', [], 'pt', 'Mensagem não encontrada');
-```
-
-#### `trans()`
-
-Traduz a mensagem fornecida usando os arquivos de tradução.
+Get the evaluated view contents for the given view.
 
 ```php
-// Tradução básica
-$message = trans('messages.welcome');
+// Render view
+$html = view('welcome');
 
-// Com substituições
-$greeting = trans('messages.hello', ['name' => $user->name]);
+// View with data
+$html = view('user.profile', ['user' => $user]);
 
-// Arquivo específico
-$error = trans('validation.required', ['attribute' => 'email']);
-
-// Namespace de package
-$text = trans('package::messages.title');
-```
-
-#### `trans_choice()`
-
-Traduz a mensagem baseada em uma contagem (pluralização).
-
-```php
-// Pluralização
-$message = trans_choice('messages.apples', $count);
-// 0: 'no apples', 1: '1 apple', 2+: '2 apples'
-
-// Com substituições
-$text = trans_choice('messages.items', $count, ['count' => $count]);
-
-// Regras complexas
-$result = trans_choice('messages.comments', $commentCount, [
-    'count' => $commentCount,
-    'user' => $user->name
+// View with data array
+$html = view('emails.notification', [
+    'user' => $user,
+    'message' => $message
 ]);
-```
 
-### Tratamento de Erros
-
-#### `report()`
-
-Reporta uma exceção para o sistema de logging/monitoramento.
-
-```php
-// Reportar exceção
-try {
-    risky_operation();
-} catch (Exception $e) {
-    report($e);
-    // Continuar execução
+// Check if view exists
+if (view()->exists('custom.template')) {
+    $html = view('custom.template');
 }
 
-// Reportar erro customizado
-report(new CustomException('Algo deu errado'));
-
-// Com contexto adicional
-report($exception, ['user_id' => auth()->id()]);
+// Return view response
+return view('dashboard', compact('users', 'stats'));
 ```
 
-#### `report_if()`
-
-Reporta uma exceção se a condição fornecida for verdadeira.
-
-```php
-// Reportar condicionalmente
-report_if($shouldLog, $exception);
-
-// Com condições complexas
-report_if(
-    app()->environment('production') && $error->isCritical(),
-    $error
-);
-
-// Baseado em configuração
-report_if(config('app.debug'), new DebugException($data));
-```
-
-#### `report_unless()`
-
-Reporta uma exceção a menos que a condição seja verdadeira.
-
-```php
-// Reportar a menos que seja desenvolvimento
-report_unless(app()->environment('local'), $exception);
-
-// Reportar a menos que seja ignorável
-report_unless($error->isIgnorable(), $error);
-
-// Com múltiplas condições
-report_unless(
-    $user->isAdmin() || app()->environment('testing'),
-    $securityException
-);
-```
-
-#### `rescue()`
-
-Captura uma exceção potencial e retorna um valor padrão.
-
-```php
-// Operação arriscada com fallback
-$result = rescue(function () {
-    return external_api_call();
-}, 'valor padrão');
-
-// Com callback de erro
-$data = rescue(function () {
-    return parse_json($invalidJson);
-}, function ($exception) {
-    logger()->error('JSON parsing failed', ['error' => $exception->getMessage()]);
-    return [];
-});
-
-// Operações de banco
-$user = rescue(function () {
-    return User::findOrFail($id);
-}, new User());
-```
-
-#### `throw_if()`
-
-Lança uma exceção se a condição fornecida for verdadeira.
-
-```php
-// Validação simples
-throw_if($errors->any(), 'Erro de validação encontrado');
-
-// Com exceção específica
-throw_if(!$user, new UserNotFoundException());
-
-// Condições múltiplas
-throw_if(
-    !$user || !$user->isActive(),
-    new UnauthorizedException('Usuário inativo')
-);
-
-// Com dados
-throw_if($quota->exceeded(), new QuotaExceededException([
-    'current' => $quota->current,
-    'limit' => $quota->limit
-]));
-```
-
-#### `throw_unless()`
-
-Lança uma exceção a menos que a condição seja verdadeira.
-
-```php
-// Verificar autorização
-throw_unless(auth()->check(), new AuthenticationException());
-
-// Verificar permissões
-throw_unless(
-    $user->can('update', $post),
-    new AuthorizationException('Sem permissão para editar')
-);
-
-// Validação de negócio
-throw_unless(
-    $order->isPending(),
-    new InvalidStateException('Pedido não pode ser modificado')
-);
-```
-
-### URLs e Rotas
-
-#### `action()`
-
-Gera a URL para uma ação do controller especificada.
-
-```php
-// Ação básica
-$url = action('UserController@show', ['id' => 1]);
-
-// Com namespace
-$url = action('App\Http\Controllers\UserController@show', ['user' => 1]);
-
-// Método estático
-$url = action([UserController::class, 'show'], ['user' => 1]);
-
-// Com query string
-$url = action('PostController@index', ['category' => 'tech']);
-```
-
-#### `asset()`
-
-Gera um caminho de asset para a aplicação com versionamento automático.
-
-```php
-// Asset básico
-echo asset('css/app.css'); // /css/app.css
-
-// Com subpastas
-echo asset('images/logos/brand.png'); // /images/logos/brand.png
-
-// JavaScript
-echo asset('js/app.js'); // /js/app.js
-
-// Em views
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-<script src="{{ asset('js/app.js') }}"></script>
-```
-
-#### `route()`
-
-Gera a URL para uma rota nomeada com parâmetros opcionais.
-
-```php
-// Rota simples
-$url = route('home'); // /
-
-// Com parâmetros
-$url = route('user.profile', ['user' => 1]); // /users/1
-
-// Parâmetros nomeados
-$url = route('posts.show', ['post' => $post->id, 'slug' => $post->slug]);
-
-// Com query string
-$url = route('posts.index', ['page' => 2]); // /posts?page=2
-```
-
-#### `secure_asset()`
-
-Gera um caminho de asset com HTTPS forçado.
-
-```php
-// Asset seguro
-echo secure_asset('css/app.css'); // https://exemplo.com/css/app.css
-
-// Para CDN
-echo secure_asset('images/logo.png'); // https://cdn.exemplo.com/images/logo.png
-
-// Em ambientes mistos
-if (request()->secure()) {
-    $asset = secure_asset('js/app.js');
-} else {
-    $asset = asset('js/app.js');
-}
-```
-
-#### `secure_url()`
-
-Gera uma URL HTTPS para a aplicação.
-
-```php
-// URL segura
-$url = secure_url('/admin'); // https://exemplo.com/admin
-
-// Com parâmetros
-$url = secure_url('/search', ['q' => 'laravel']); // https://exemplo.com/search?q=laravel
-
-// API endpoints
-$apiUrl = secure_url('/api/v1/users');
-```
-
-#### `url()`
-
-Gera uma URL para a aplicação com caminho opcional.
-
-```php
-// URL base
-$base = url(); // https://exemplo.com
-
-// Com caminho
-$profile = url('/profile'); // https://exemplo.com/profile
-
-// Com parâmetros
-$search = url('/search', ['q' => 'laravel']); // https://exemplo.com/search?q=laravel
-
-// URL completa
-$full = url()->full(); // URL atual completa
-```
-
-### Validação de Valores
-
-#### `blank()`
-
-Determina se um valor está "vazio" (null, string vazia, array vazio, etc.).
-
-```php
-// Valores vazios
-blank('') // true
-blank(null) // true
-blank([]) // true
-blank(collect()) // true
-
-// Valores preenchidos
-blank('texto') // false
-blank(0) // false
-blank([1, 2, 3]) // false
-
-// Uso prático
-if (blank($user->bio)) {
-    $user->bio = 'Usuário ainda não adicionou uma biografia.';
-}
-```
-
-#### `filled()`
-
-Determina se um valor está "preenchido" (oposto de blank).
-
-```php
-// Valores preenchidos
-filled('texto') // true
-filled([1, 2, 3]) // true
-filled(0) // true
-
-// Valores vazios
-filled('') // false
-filled(null) // false
-filled([]) // false
-
-// Validação
-if (filled($request->description)) {
-    $post->description = $request->description;
-}
-```
+---
